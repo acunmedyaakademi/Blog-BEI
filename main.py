@@ -14,6 +14,7 @@ def home():
 def about():
     return render_template('about.html')
 
+
 @app.route('/post')
 def post():
     conn = sqlite3.connect('blog.db')
