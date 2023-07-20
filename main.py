@@ -4,7 +4,7 @@ import sqlite3
 
 created_on = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
-app = Flask(_name_, '/assets', 'assets')
+app = Flask(__name__, '/assets', 'assets')
 
 # @app.route('/')
 # def home():
@@ -77,5 +77,5 @@ def contact():
 
 
 
-if _name_ == "_main_":
+if __name__== "_main_":
     app.run()
