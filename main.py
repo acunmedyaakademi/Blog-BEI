@@ -14,8 +14,27 @@ def home():
 def about():
     return render_template('about.html')
 
+@app.route('/all-post')
+def all_post():
+    blog_data = []
+    with sqlite3.connect('blog.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM post')
+        row = cursor.fetchall()
+
+        if row is None:
+            return "Post not found.", 404
+
+        blog_data = {
+            'title': row[2],
+            'description': row[3],
+        }
+
+    return render_template('post.html', blog_data=blog_data)
+
+
 @app.route('/post/<int:post_id>')
-def post(post_id):
+def post_id(post_id):
     blog_data = []
     with sqlite3.connect('blog.db') as conn:
         cursor = conn.cursor()
