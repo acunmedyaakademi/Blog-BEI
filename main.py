@@ -14,24 +14,24 @@ def home():
 def about():
     return render_template('about.html')
 
-@app.route('/post')
-def post():
-    if request.method == 'POST':
-        conn = sqlite3.connect('blog.db')
+@app.route('/post/<int:post_id>')
+def post(post_id):
+    blog_data = []
+    with sqlite3.connect('blog.db') as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM post')
-        rows = cursor.fetchall()
-        blog_data = []
-        for row in rows:
-            blog_data.append({
-                'id': row[0],
-                'post_id': row[1],
-                'title': row[2],
-                'description': row[3],
-                'created_on' : row[4]
-            })
-        conn.close()
-    return render_template('post.html',blog_data=blog_data)
+        cursor.execute('SELECT * FROM post WHERE id = ?', (post_id,))
+        row = cursor.fetchone()
+
+        if row is None:
+            return "Post not found.", 404
+
+        blog_data = {
+            'title': row[2],
+            'description': row[3],
+            'created_on': row[4]
+        }
+
+    return render_template('post.html', blog_data=blog_data)
 
 
 
