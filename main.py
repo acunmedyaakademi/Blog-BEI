@@ -6,31 +6,33 @@ created_on = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
 app = Flask(__name__, '/assets', 'assets')
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+# @app.route('/')
+# def home():
+#     return render_template('index.html')
 
 @app.route('/about')
 def about():
     return render_template('about.html')
 
-@app.route('/all-post')
+@app.route('/')
 def all_post():
     blog_data = []
     with sqlite3.connect('blog.db') as conn:
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM post')
-        row = cursor.fetchall()
+        rows = cursor.fetchall()
 
-        if row is None:
+        if rows is None:
             return "Post not found.", 404
 
-        blog_data = {
-            'title': row[2],
-            'description': row[3],
-        }
+        for row in rows:
+            blog_data.append({
+                'id': row[0],
+                'title': row[2],
+                'description': row[3],
+            })
 
-    return render_template('post.html', blog_data=blog_data)
+    return render_template('index.html', posts=blog_data)
 
 
 @app.route('/post/<int:post_id>')
