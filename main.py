@@ -67,8 +67,6 @@ def post_id(post_id):
 
 
 
-
-
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
