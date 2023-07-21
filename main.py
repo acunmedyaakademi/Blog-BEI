@@ -10,9 +10,6 @@ app = Flask(__name__, '/assets', 'assets')
 # def home():
 #     return render_template('index.html')
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
 
 @app.route('/')
 def all_post():
@@ -56,6 +53,11 @@ def post_id(post_id):
 
 
 
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
     
 
 
@@ -71,11 +73,50 @@ def contact():
 
 
 
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')
+
+
+
+@app.route('/admin-add', methods=['GET', 'POST'])
+def blog_add():
+    if request.method == 'POST':
+        title = request.form['title']
+        description = request.form['description']
+        created_on = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+
+        conn = sqlite3.connect('blog.db')
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO post (title, description, created_on) VALUES (?, ?, ?)',(title, description, created_on))
+        conn.commit()
+        conn.close()
+        return jsonify({"status": "success"})
+    return render_template('admin.html')
+
+        
+
+     
 
 
 
 
 
 
-if __name__== "_main_":
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__== "__main__":
     app.run()
