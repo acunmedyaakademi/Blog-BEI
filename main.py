@@ -44,9 +44,9 @@ def post_id(post_id):
             return "Post not found.", 404
 
         blog_data = {
-            'title': row[2],
-            'description': row[3],
-            'created_on': row[4]
+            'title': row[1],
+            'description': row[2],
+            'created_on': row[3]
         }
 
     return render_template('post.html', blog_data=blog_data)
